@@ -1,0 +1,16 @@
+
+
+
+base = 101
+exponent = 17
+modulus = 22663
+
+#print(pow(m,e,n)) 
+
+print(pow(base, exponent, modulus))
+
+# d = pow(e,-1,t) inverse to find d num rsa4 
+#pow cdm num rsa5 
+#
+
+

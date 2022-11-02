@@ -1,0 +1,42 @@
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import hashlib
+
+
+
+def is_pkcs7_padded(message):
+    padding = message[-message[-1]:]
+    return all(padding[i] == len(padding) for i in range(0, len(padding)))
+
+
+def decrypt_flag(shared_secret: int, iv: str, ciphertext: str):
+    # Derive AES key from shared secret
+    sha1 = hashlib.sha1()
+    sha1.update(str(shared_secret).encode('ascii'))
+    key = sha1.digest()[:16]
+    # Decrypt flag
+    ciphertext = bytes.fromhex(ciphertext)
+    iv = bytes.fromhex(iv)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    plaintext = cipher.decrypt(ciphertext)
+
+    if is_pkcs7_padded(plaintext):
+        return unpad(plaintext, 16).decode('ascii')
+    else:
+        return plaintext.decode('ascii')
+
+
+shared_secret = 1547922466740669851136899009270554812141325611574971428561894811681012510829813498961168330963719034921137405736161582760628870855358912091728546731744381382987669929718448423076919613463237884695314172139247244360699127770351428964026451292014069829877638774839374984158095336977179683450837507011404610904412301992397725594661037513152497857482717626617522302677408930050472100106931529654955968569601928777990379536458959945351084885704041496571582522945310187
+
+iv = '737561146ff8194f45290f5766ed6aba'
+
+ciphertext = '39c99bf2f0c14678d6a5416faef954b5893c316fc3c48622ba1fd6a9fe85f3dc72a29c394cf4bc8aff6a7b21cae8e12c'
+
+print(decrypt_flag(shared_secret, iv, ciphertext))
+
+
+{"p": "0xffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024e088a67cc74020bbea63b139b22514a08798e3404ddef9519b3cd3a431b302b0a6df25f14374fe1356d6d51c245e485b576625e7ec6f44c42e9a637ed6b0bff5cb6f406b7edee386bfb5a899fa5ae9f24117c4b1fe649286651ece45b3dc2007cb8a163bf0598da48361c55d39a69163fa8fd24cf5f83655d23dca3ad961c62f356208552bb9ed529077096966d670c354e4abc9804f1746c08ca237327ffffffffffffffff",
+ "g": "0x02",
+ "A": "0x3a4ba4e38d457c06bd167fe2e21fe728b7e87866b9326dde3e8478d6ee2fc1ebfcdcab682aae1829c15d1aacd909cf0be90cb126b291ceaeba638324e3ca4fec84db8fe8237d18d8cd2040fedbae525e4f6468eecfa35a726404c298fc81455249743a3f50229d41301da01393be807155476e28b0da12afb00b2b5e0f001760b5aafaa7bd6914af5f75718ca0b5a4823e6534bbda08bfaccf8c0d81445c8485e41c233ed7029b3c952c821c7141076850838b4d60bd208b6cb5e975f2fb59e7"}
+
+{"iv": "cbf99ed90f32f477cc65752c36fcc671", "encrypted_flag": "008c1290a4d895dfb7f9629ce56fa57d55a52b72e10087862922a7460cfdbab6"}

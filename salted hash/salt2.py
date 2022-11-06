@@ -1,9 +1,5 @@
 import hashlib
-'''the seed is geven by a md5 of the user but with the case reverse
-like the user is nOOB and the md5 is 654e1c2ac6312d8c6441282f155c8ce9
-and when we reverse the md5 by brute force we obtain Noob so it reverse the user and do a md5 algorithm on
-so to get the seed of ECSC user we do the md5 of ecsc
-'''
+
 
 seed = hashlib.md5()
 seed.update(b"noob")
